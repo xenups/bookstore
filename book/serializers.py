@@ -15,9 +15,19 @@ class PublisherSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
-    authors = AuthorSerializer(read_only=True, many=True)
-    publisher = PublisherSerializer(read_only=True, many=False)
+    authors = AuthorSerializer(many=True)
+    publisher = PublisherSerializer(many=False)
 
     class Meta:
         model = models.Book
         fields = ('title', 'authors', 'publisher', 'publication_date')
+
+    def create(self, validated_data):
+        authors_data = validated_data.pop('authors')
+
+        book = models.Book.objects.create(**validated_data)
+
+        for author in authors_data:
+            author, created = models.Author.objects.get_or_create(first_name=author['first_name'])
+            book.authors.add(author)
+        return book

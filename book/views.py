@@ -9,12 +9,12 @@ from book.permissions import IsLoggedInUserOrAdmin, IsAuthenticatedNotPost
 
 
 class BookList(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = models.Book.objects.all()
     serializer_class = serializers.BookSerializer
 
 
 class BookDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticatedNotPost,)
+    #   permission_classes = (IsAuthenticatedNotPost,)
     queryset = models.Book.objects.all()
     serializer_class = serializers.BookSerializer
