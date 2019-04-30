@@ -27,12 +27,18 @@ SECRET_KEY = '34j-bnr%blt0c15i)%vbag_&5*$%81sm1u2pqixv)&sdlr5(%-'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+REST_REGISTRATION = {
+    'REGISTER_VERIFICATION_ENABLED': False,
+    'RESET_PASSWORD_VERIFICATION_URL': 'https://frontend-host/reset-password/',
+    'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
+    'VERIFICATION_FROM_EMAIL': 'no-reply@example.com',
 
+
+}
 # Application definition
 
 INSTALLED_APPS = [
     'grappelli',
-    'guardian',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -119,6 +125,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
+
 
 STATIC_URL = '/static/'
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))

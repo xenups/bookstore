@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from rest_framework import generics
 from book import serializers
@@ -18,3 +19,13 @@ class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     #   permission_classes = (IsAuthenticatedNotPost,)
     queryset = models.Book.objects.all()
     serializer_class = serializers.BookSerializer
+
+
+class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
+
+
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer

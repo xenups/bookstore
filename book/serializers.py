@@ -1,5 +1,26 @@
+from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from book import models
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username','password', 'email')
+
+    def create(self, validated_data):
+        user = User.objects.create(**validated_data)
+        user.username = validated_data['username']
+        user.set_password(validated_data['password'])
+        user.email = validated_data['email']
+        user.save()
+        return user
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('url', 'name')
 
 
 class AuthorSerializer(serializers.ModelSerializer):
