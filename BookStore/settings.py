@@ -27,14 +27,7 @@ SECRET_KEY = '34j-bnr%blt0c15i)%vbag_&5*$%81sm1u2pqixv)&sdlr5(%-'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-REST_REGISTRATION = {
-    'REGISTER_VERIFICATION_ENABLED': False,
-    'RESET_PASSWORD_VERIFICATION_URL': 'https://frontend-host/reset-password/',
-    'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
-    'VERIFICATION_FROM_EMAIL': 'no-reply@example.com',
 
-
-}
 # Application definition
 
 INSTALLED_APPS = [
