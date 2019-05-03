@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 # these classes can customize ur admin parts
-from book.models import Publisher, Author, Book
+from book.models import Publisher, Author, Book, UserProfile
 
 
 class AuthorAdmin(admin.ModelAdmin):
@@ -30,4 +30,5 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(Book, BookAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Publisher)
+admin.site.register(UserProfile)
 # Register your models here.

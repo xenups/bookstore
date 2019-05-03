@@ -5,9 +5,11 @@ from book.models import UserProfile
 
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
-        fields = ('username', 'password', 'email')
+        fields = ('username', 'password', 'first_name', 'last_name', 'email')
 
     def create(self, validated_data):
         user = User.objects.create(**validated_data)
@@ -19,36 +21,17 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='pk', read_only=True)
-    username = serializers.CharField(source='user.username', read_only=True)
-    email = serializers.CharField(source='user.email')
-    first_name = serializers.CharField(source='user.first_name')
-    last_name = serializers.CharField(source='user.last_name')
+    user = UserSerializer(required=True)
 
     class Meta:
         model = UserProfile
-        fields = (
-            'id', 'username', 'email', 'first_name', 'last_name',
-            'created_at', 'updated_at', 'bio',
-        )
-        read_only_fields = ('created_at', 'updated_at',)
-
-    def update(self, instance, validated_data):
-        # First, update the User
-        user_data = validated_data.pop('user', None)
-        for attr, value in user_data.items():
-            setattr(instance.user, attr, value)
-        # Then, update UserProfile
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-        return instance
+        fields = ('user', 'bio')
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
-        user = User.objects.create(**user_data)
-
-        profile = UserProfile.objects.create(user=user, **validated_data)
+        user = UserSerializer.create(UserSerializer(), validated_data=user_data)
+        profile, created = UserProfile.objects.update_or_create(user=user, bio=validated_data.pop('bio'))
+        profile.save()
         return profile
 
 

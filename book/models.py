@@ -12,19 +12,8 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.username
-
-    @receiver(post_save, sender=User)
-    def create_profile_for_user(sender, instance=None, created=False, **kwargs):
-        if created:
-            UserProfile.objects.get_or_create(user=instance)
-
-    @receiver(pre_delete, sender=User)
-    def delete_profile_for_user(sender, instance=None, **kwargs):
-        if instance:
-            user_profile = UserProfile.objects.get(user=instance)
-            user_profile.delete()
 
 
 class Publisher(models.Model):
