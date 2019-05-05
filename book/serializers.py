@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
     def validate(self, data):
         # here data has all the fields which have validated values
         # so we can create a User instance out of it
-        user = User(**data)
+        # user = User(**data)
 
         # get the password from the data
         password = data.get('password')
@@ -39,23 +39,39 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create(**validated_data)
         user.username = validated_data['username']
         user.set_password(validated_data['password'])
-
         user.email = validated_data['email']
         user.save()
         return user
 
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user')
+        user_serializer = UserSerializer()
+        super(self.__class__, self).update(instance, validated_data)
+        super(UserSerializer, user_serializer).update(instance.user, user_data)
+        return instance
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(required=True)
+    user = UserSerializer()
 
     class Meta:
         model = UserProfile
         fields = ('user', 'bio')
 
+    def update(self, instance, validated_data):
+        user = validated_data.get('user')
+        instance.user.first_name = user.get('first_name')
+        instance.user.last_name = user.get('last_name')
+        instance.user.password = user.get('password')
+        instance.user.email = user.get('email')
+        bio = validated_data.pop('bio')
+        instance.bio = bio
+        return instance
+
     def create(self, validated_data):
         user_data = validated_data.pop('user')
         user = UserSerializer.create(UserSerializer(), validated_data=user_data)
-        profile, created = UserProfile.objects.update_or_create(user=user, bio=validated_data.pop('bio'))
+        profile, created = UserProfile.objects.get_or_create(user=user, bio=validated_data.pop('bio'))
         profile.save()
         return profile
 

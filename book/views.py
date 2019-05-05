@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from rest_framework import generics
+from rest_framework.mixins import UpdateModelMixin
+
 from book import serializers
 from book import models
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny, IsAdminUser
@@ -27,9 +29,9 @@ class UserList(generics.ListCreateAPIView):
     serializer_class = serializers.UserSerializer
 
 
-# class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = serializers.UserSerializer
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
 
 
 class UserProfileList(generics.ListCreateAPIView):
@@ -37,6 +39,7 @@ class UserProfileList(generics.ListCreateAPIView):
     serializer_class = serializers.UserProfileSerializer
 
 
-class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView, UpdateModelMixin):
     queryset = UserProfile.objects.all()
+
     serializer_class = serializers.UserProfileSerializer
