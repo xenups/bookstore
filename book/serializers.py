@@ -44,10 +44,12 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        user_data = validated_data.pop('user')
-        user_serializer = UserSerializer()
-        super(self.__class__, self).update(instance, validated_data)
-        super(UserSerializer, user_serializer).update(instance.user, user_data)
+        user = validated_data.get('user')
+        instance.password = user.get('password')
+        instance.email = user.get('email')
+        instance.first_name = user.get('first_name')
+        instance.last_name = user.get('last_name')
+        instance.save()
         return instance
 
 
@@ -62,10 +64,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
         user = validated_data.get('user')
         instance.user.first_name = user.get('first_name')
         instance.user.last_name = user.get('last_name')
-        instance.user.password = user.get('password')
+        instance.user.set_password(user.get('password'))
         instance.user.email = user.get('email')
+        # every instances entity must be saved before return
+        instance.user.save()
         bio = validated_data.pop('bio')
         instance.bio = bio
+        instance.save()
         return instance
 
     def create(self, validated_data):
