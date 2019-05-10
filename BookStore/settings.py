@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'book.apps.BookConfig',
+    'bookFBV.apps.BookfbvConfig',
     'rest_framework'
 ]
 

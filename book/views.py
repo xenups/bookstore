@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.mixins import UpdateModelMixin
 
 from book import serializers
@@ -39,6 +39,9 @@ class UserProfileList(generics.ListCreateAPIView):
 
 
 class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView, UpdateModelMixin):
-    queryset = UserProfile.objects.all()
-
+    # queryset = UserProfile.objects.all()
     serializer_class = serializers.UserProfileSerializer
+
+    def get_queryset(self):
+        username = self.kwargs['pk']
+        return UserProfile.objects.filter(user_id='23')
