@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('admin/', admin.site.urls),
     path('api/', include('book.urls')),
+    path('apifbv/',include('bookFBV.urls')),
 
 
 ]
