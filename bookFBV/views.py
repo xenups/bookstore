@@ -1,7 +1,7 @@
 from django.shortcuts import render
 # Function Base View Tutorial
 # Create your views here.
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -24,8 +24,13 @@ class BookListView(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        book = request.data.get("books")
-        serializer = BookSerializer(data=book)
-        if serializer.is_valid(raise_exception=True):
-            book_saved = serializer.save()
-        return Response({"succeeded" + book_saved.title})
+        for key in request.data:
+            print(key)
+        print(request.data["title"])
+        a_book = Book.objects.create(title=request.data["title"],
+                                     )
+
+        return Response(
+            BookSerializer(a_book).data,
+            status=status.HTTP_201_CREATED
+        )
