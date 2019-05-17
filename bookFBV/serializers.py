@@ -30,19 +30,39 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = ('title', 'authors', 'publisher', 'publication_date')
 
-        def create(self, validated_data):
-            # first we pop or get the the type of the data we want
-            publish_data = validated_data.pop('publisher')
-            authors_data = validated_data.pop('authors')
-            # then we create an object  of book to put created data into it
-            book = Book.objects.create(**validated_data)
-            # then we create an object by pop ed type and finally we put it into book then we save it
-            publish, created = Publisher.objects.get_or_create(name=publish_data['name'])
-            book.publisher = publish
-            book.save()
-            for author in authors_data:
-                author, created = Author.objects.get_or_create(first_name=author['first_name'])
-                book.authors.add(author)
+    def create(self, validated_data):
+        # first we pop or get the the type of the data we want
+        publish_data = validated_data.pop('publisher')
+        authors_data = validated_data.pop('authors')
+        # then we create an object  of book to put created data into it
+        book = Book.objects.create(**validated_data)
+        # then we create an object by pop ed type and finally we put it into book then we save it
+        publish, created = Publisher.objects.get_or_create(name=publish_data['name'])
+        book.publisher = publish
+        book.save()
+        for author in authors_data:
+            author, created = Author.objects.get_or_create(first_name=author['first_name'])
+            book.authors.add(author)
 
-            book.save()
-            return book
+        book.save()
+        return book
+
+    def update(self, instance, validated_data):
+        publish_data = validated_data.pop('publisher')
+        authors_data = validated_data.pop('authors')
+        # we fill instances with validated data
+        instance.title = validated_data['title']
+        instance.publication_date = validated_data['publication_date']
+        # we fill nested serializer like we defined in create
+        publish, created = Publisher.objects.get_or_create(name=publish_data['name'])
+        instance.publisher = publish
+        # we fill nested serializer like we defined in create
+        # its multiple data form, we have multiple authors for a book
+        authors_list = []
+        for author in authors_data:
+            author, created = Author.objects.get_or_create(first_name=author['first_name'])
+            authors_list.append(author)
+
+        instance.authors.set(authors_list)
+        instance.save()
+        return instance
