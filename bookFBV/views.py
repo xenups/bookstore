@@ -36,7 +36,6 @@ class BookListView(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-
         a_book = Book.objects.create(title=request.data["title"], )
 
         return Response(

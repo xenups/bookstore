@@ -1,11 +1,16 @@
 Django==2.2
 django-grappelli==2.12.2
 django-guardian==1.5.0
+django-rest-auth==0.9.5
 django-rest-guardian==1.1.1
+django-rest-registration==0.4.3
 djangorestframework==3.9.2
 djangorestframework-simplejwt==4.3.0
+gunicorn==19.9.0
+Pillow==6.0.0
 PyJWT==1.7.1
 pytz==2019.1
 simplejwt==2.0.1
+six==1.12.0
 sqlparse==0.3.0
 typing==3.6.6
