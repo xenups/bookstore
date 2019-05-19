@@ -5,15 +5,14 @@ from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
 
 from bookFBV.models import Book
 from bookFBV.serializers import BookSerializer
-from rest_framework import mixins
+from rest_framework import mixins, viewsets
 
 
-class BookDetailsView(generics.GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
-                      mixins.DestroyModelMixin):
+class BookDetailsView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
+                      mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
