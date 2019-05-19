@@ -5,12 +5,17 @@ from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
+
 from bookFBV.models import Book
 from bookFBV.serializers import BookSerializer
+from rest_framework import mixins
 
 
-class BookDetailsView(generics.RetrieveUpdateDestroyAPIView):
+class BookDetailsView(generics.GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
+                      mixins.DestroyModelMixin):
     queryset = Book.objects.all()
+    serializer_class = BookSerializer
 
     def get(self, *args, **kwargs):
         book = get_object_or_404(Book, pk=self.kwargs['pk'])
@@ -29,7 +34,10 @@ class BookDetailsView(generics.RetrieveUpdateDestroyAPIView):
         return Response({"book deleted"}, status=status.HTTP_200_OK)
 
 
-class BookListView(generics.RetrieveUpdateDestroyAPIView):
+class BookListView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
     def get(self, *args, **kwargs):
         books = Book.objects.all()
         serializer = BookSerializer(books, many=True)
