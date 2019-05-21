@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 # Function Base View Tutorial
+from django_jalali.db import models as jmodels
 
 class Publisher(models.Model):
     name = models.CharField(max_length=30)
@@ -30,7 +31,8 @@ class Book(models.Model):
     title = models.CharField(max_length=50, verbose_name="موضوع")
     authors = models.ManyToManyField(Author, verbose_name="نویسنده")
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, blank=True, null=True, verbose_name="ناشر")
-    publication_date = models.DateField(blank=True, null=True, verbose_name="تاریخ انتشار")
+    publication_date = jmodels.jDateField(blank=True, null=True, verbose_name="تاریخ انتشار")
+
 
     def __str__(self):
         return self.title

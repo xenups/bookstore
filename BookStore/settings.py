@@ -26,14 +26,13 @@ SECRET_KEY = '34j-bnr%blt0c15i)%vbag_&5*$%81sm1u2pqixv)&sdlr5(%-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
-
 ALLOWED_HOSTS = []
 
 # Application definition
 
 INSTALLED_APPS = [
     'grappelli',
+    'django_jalali',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,7 +43,30 @@ INSTALLED_APPS = [
     'bookFBV.apps.BookfbvConfig',
     'rest_framework'
 ]
-
+# defaults
+JALALI_DATE_DEFAULTS = {
+    'Strftime': {
+        'date': '%y/%m/%d',
+        'datetime': '%H:%M:%S _ %y/%m/%d',
+    },
+    'Static': {
+        'js': [  # prefix address is 'admin/'
+            'js/django_jalali.min.js',
+            # or
+            # 'jquery.ui.datepicker.jalali/scripts/jquery-1.10.2.min.js',
+            # 'jquery.ui.datepicker.jalali/scripts/jquery.ui.core.js',
+            # 'jquery.ui.datepicker.jalali/scripts/calendar.js',
+            # 'jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc.js',
+            # 'jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc-fa.js',
+            # 'js/main.js',
+        ],
+        'css': {
+            'all': [
+                'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css',
+            ]
+        }
+    },
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
