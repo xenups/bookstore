@@ -26,6 +26,9 @@ SECRET_KEY = '34j-bnr%blt0c15i)%vbag_&5*$%81sm1u2pqixv)&sdlr5(%-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
+
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
     'bookFBV.apps.BookfbvConfig',
     'rest_framework'
 ]
+
 # defaults
 JALALI_DATE_DEFAULTS = {
     'Strftime': {

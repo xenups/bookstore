@@ -58,7 +58,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('user', 'bio')
+        fields = ('user', 'bio','avatar')
 
     def update(self, instance, validated_data):
         user = validated_data.get('user')
@@ -69,6 +69,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
         # every instances entity must be saved before return
         instance.user.save()
         bio = validated_data.pop('bio')
+        avatar = validated_data.pop('avatar')
+        instance.avatar = avatar
         instance.bio = bio
         instance.save()
         return instance
@@ -76,7 +78,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user_data = validated_data.pop('user')
         user = UserSerializer.create(UserSerializer(), validated_data=user_data)
-        profile, created = UserProfile.objects.get_or_create(user=user, bio=validated_data.pop('bio'))
+        profile, created = UserProfile.objects.get_or_create(user=user, bio=validated_data.pop('bio'),
+                                                             avatar=validated_data.pop('avatar'))
         profile.save()
         return profile
 

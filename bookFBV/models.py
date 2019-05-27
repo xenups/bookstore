@@ -12,7 +12,7 @@ class Publisher(models.Model):
     address = models.CharField(max_length=100, null=True)
     city = models.CharField(max_length=60, null=True)
     state_province = models.CharField(max_length=60, null=True)
-    website = models.URLField(null=True)
+    website = models.URLField(null=True,blank=True)
 
     def __str__(self):
         return self.name
