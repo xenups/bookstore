@@ -58,7 +58,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('user', 'bio','avatar')
+        fields = ('user', 'bio', 'avatar')
 
     def update(self, instance, validated_data):
         user = validated_data.get('user')
@@ -106,18 +106,27 @@ class BookSerializer(serializers.ModelSerializer):
     authors = AuthorSerializer(many=True)
     publisher = PublisherSerializer(many=False)
 
+    def to_internal_value(self, data):
+        # when object received here changed to the object view
+        # it changed the nested object to flat
+        # just work while using post
+        self.fields['publisher'] = serializers.PrimaryKeyRelatedField(
+            queryset=models.Publisher.objects.all())
+        return super(BookSerializer, self).to_internal_value(data)
+
     class Meta:
         model = models.Book
-        fields = ('title', 'authors', 'publisher', 'publication_date')
+        fields = ('id', 'title', 'authors', 'publisher', 'publication_date')
 
     def create(self, validated_data):
         # first we pop or get the the type of the data we want
         publish_data = validated_data.pop('publisher')
         authors_data = validated_data.pop('authors')
+
         # then we create an object  of book to put created data into it
         book = models.Book.objects.create(**validated_data)
         # then we create an object by pop ed type and finally we put it into book then we save it
-        publish, created = models.Publisher.objects.get_or_create(name=publish_data['name'])
+        publish, created = models.Publisher.objects.get_or_create(pk=publish_data.pk)
         book.publisher = publish
         book.save()
         for author in authors_data:
