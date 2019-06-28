@@ -1,8 +1,10 @@
 from django.contrib.auth.models import User, Group
 from django.core import exceptions
+from drf_haystack.serializers import HaystackSerializer
 from rest_framework import serializers
 from book import models
 from book.models import UserProfile
+from .search_indexes import BookIndex
 import django.contrib.auth.password_validation as validators
 
 
@@ -100,6 +102,12 @@ class PublisherSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Publisher
         fields = ('name', 'address', 'city', 'state_province', 'website')
+
+
+class haystackBookSerializer(HaystackSerializer):
+    class Meta:
+        index_classes = [BookIndex]
+        fields = ["text", "title", "authors", "publisher"]
 
 
 class BookSerializer(serializers.ModelSerializer):

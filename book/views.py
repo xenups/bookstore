@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from drf_haystack.viewsets import HaystackViewSet
 from rest_framework import generics, filters
 from rest_framework.mixins import UpdateModelMixin
 
@@ -15,6 +16,11 @@ class BookList(generics.ListCreateAPIView):
     # permission_classes = (IsAuthenticated,)
     queryset = models.Book.objects.all()
     serializer_class = serializers.BookSerializer
+
+
+class BookSearchView(HaystackViewSet):
+    index_models = [models.Book]
+    serializer_class = serializers.haystackBookSerializer
 
 
 class BookDetail(generics.RetrieveUpdateDestroyAPIView):

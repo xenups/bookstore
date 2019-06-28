@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'grappelli',
+    'haystack',
     'django_jalali',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,7 +47,16 @@ INSTALLED_APPS = [
     'bookFBV.apps.BookfbvConfig',
     'rest_framework'
 ]
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE':
+            'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}
 # defaults
 JALALI_DATE_DEFAULTS = {
     'Strftime': {
