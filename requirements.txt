@@ -10,7 +10,7 @@ django-nine==0.2.2
 django-rest-auth==0.9.5
 django-rest-guardian==1.1.1
 django-rest-registration==0.4.3
-djangorestframework==3.9.2
+djangorestframework==3.11.2
 djangorestframework-simplejwt==4.3.0
 drf-haystack==1.8.5
 elasticsearch==7.0.1
